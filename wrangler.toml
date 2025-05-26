@@ -1,0 +1,5 @@
+name = "cfpagesbasic"
+compatibility_date = "2025-05-25"
+
+[env.production]
+pages_build_output_dir = "."

@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Page title will be dynamically updated from config.txt -->
+    <title id="page-title">Professional Landing Page</title>
+    <style>
+        /* Reset all default browser styles for consistency */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* Main body styling - uses CSS variables for light/dark mode */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.5;
+            background: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Light mode color variables - default theme */
+        :root {
+            --bg-color: white;           /* Main background */
+            --card-bg: white;            /* Card/container background */
+            --text-color: black;         /* Primary text color */
+            --text-muted: #666;          /* Secondary/muted text */
+            --border-color: #ccc;        /* Border colors */
+            --accent-color: black;       /* Accent elements like buttons */
+            --hover-bg: #f5f5f5;         /* Hover state backgrounds */
+        }
+        
+        /* Dark mode color variables - activated when data-theme="dark" */
+        [data-theme="dark"] {
+            --bg-color: black;           /* Dark background */
+            --card-bg: black;            /* Dark card background */
+            --text-color: white;         /* Light text on dark background */
+            --text-muted: #999;          /* Muted text in dark mode */
+            --border-color: #333;        /* Dark borders */
+            --accent-color: white;       /* Light accents on dark background */
+            --hover-bg: #1a1a1a;         /* Dark hover states */
+        }
+        
+        /* Main container - centers content and sets max width */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Main card container - holds all content with border */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+        }
+        
+        /* Top notification bar - tells users how to edit the site */
+        .edit-note {
+            background: var(--hover-bg);
+            border-left: 3px solid var(--accent-color);
+            padding: 15px 20px;
+            margin-bottom: 0;
+            font-size: 14px;
+            position: relative; /* For positioning the theme toggle button */
+        }
+        
+        .edit-note strong {
+            color: var(--accent-color);
+        }
+        
+        /* Hero section - contains name, title, and main info */
+        .hero {
+            text-align: center;
+            padding: 40px 20px;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+        }
+        
+        /* Avatar - square with user's initials */
+        .avatar {
+            width: 80px;
+            height: 80px;
+            background: var(--accent-color);
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--card-bg); /* Inverted color for contrast */
+        }
+        
+        /* User's full name - large, prominent text */
+        .name {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 8px;
+        }
+        
+        /* Job title - smaller, muted text */
+        .title {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+        
+        /* Company and location info */
+        .company {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+        
+        /* Main headline from config */
+        .headline {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 10px;
+        }
+        
+        /* Tagline/subtitle text */
+        .tagline {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+        
+        /* Main content area below hero */
+        .content {
+            padding: 30px 20px;
+        }
+        
+        /* Individual sections (About, Contact) */
+        .section {
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+        }
+        
+        /* Remove border from last section */
+        .section:last-child {
+            border-bottom: none;
+        }
+        
+        /* Section headings */
+        .section h2 {
+            font-size: 1.3rem;
+            color: var(--text-color);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        /* About section paragraph text */
+        .about-text {
+            font-size: 1rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+        
+        /* Contact section grid - responsive layout */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        /* Individual contact items (email, phone, etc.) */
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+        }
+        
+        /* Icon squares for contact items */
+        .contact-icon {
+            width: 30px;
+            height: 30px;
+            background: var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--card-bg);
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        /* Contact item labels (EMAIL, PHONE, etc.) */
+        .contact-info h3 {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Contact item values (actual email, phone number, etc.) */
+        .contact-info p {
+            font-size: 0.95rem;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+        
+        /* Links in contact section */
+        .contact-info a {
+            color: var(--text-color);
+            text-decoration: none;
+        }
+        
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Social media links container */
+        .social-links {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        /* Individual social media buttons */
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background: var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--card-bg);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .social-link:hover {
+            background: var(--text-muted);
+        }
+        
+        /* Loading state while config.txt is being fetched */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+        }
+        
+        /* Dark/light mode toggle button */
+        .theme-toggle {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: var(--accent-color);
+            color: var(--card-bg);
+            border: none;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .theme-toggle:hover {
+            background: var(--text-muted);
+        }
+        
+        /* Mobile responsive styles */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 10px;
+            }
+            
+            .hero {
+                padding: 40px 20px;
+            }
+            
+            .name {
+                font-size: 2rem;
+            }
+            
+            .headline {
+                font-size: 1.5rem;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+            
+            /* Stack contact items vertically on mobile */
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main page container -->
+    <div class="container">
+        <!-- Card that holds all content -->
+        <div class="card">
+            <!-- Top notification bar with edit instructions and theme toggle -->
+            <div class="edit-note">
+                <strong>📝 Easy to edit:</strong> To customize this page, simply edit the <code>config.txt</code> file in your GitHub repository. Changes will automatically deploy!
+                <!-- Dark/light mode toggle button -->
+                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode">🌙</button>
+            </div>
+            
+            <!-- Main content area - will be populated by JavaScript -->
+            <div id="content" class="loading">
+                Loading your professional landing page...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * Main function to load and parse the config.txt file
+         * This reads the user's personal information and builds the page content
+         */
+        async function loadConfig() {
+            try {
+                // Fetch the config.txt file from the repository
+                const response = await fetch('config.txt');
+                const configText = await response.text();
+                
+                // Parse config file into key-value pairs
+                const config = {};
+                configText.split('\n').forEach(line => {
+                    line = line.trim();
+                    // Skip empty lines and comments (lines starting with #)
+                    if (line && !line.startsWith('#')) {
+                        const [key, ...valueParts] = line.split('=');
+                        const value = valueParts.join('=').trim();
+                        if (key && value) {
+                            config[key.trim()] = value;
+                        }
+                    }
+                });
+                
+                // Generate initials for the avatar (first letter of first and last name)
+                const initials = (config.FirstName?.charAt(0) || 'J') + (config.LastName?.charAt(0) || 'D');
+                
+                // Update the browser tab title with the user's name
+                document.getElementById('page-title').textContent = `${config.FirstName || 'John'} ${config.LastName || 'Doe'}`;
+                
+                // Build the complete page content using the config values
+                const contentDiv = document.getElementById('content');
+                contentDiv.innerHTML = `
+                    <div class="hero">
+                        <div class="avatar">${initials}</div>
+                        <h1 class="name">${config.FirstName || 'John'} ${config.LastName || 'Doe'}</h1>
+                        <p class="title">${config.Title || 'Professional'}</p>
+                        <p class="company">${config.Company || 'Company'} • ${config.Location || 'Location'}</p>
+                        <h2 class="headline">${config.Headline || 'Welcome to My Professional Landing Page'}</h2>
+                        <p class="tagline">${config.Tagline || 'Passionate about creating amazing experiences'}</p>
+                        
+                        <div class="social-links">
+                            ${config.LinkedIn ? `<a href="${config.LinkedIn}" class="social-link" target="_blank">in</a>` : ''}
+                            ${config.Twitter ? `<a href="${config.Twitter}" class="social-link" target="_blank">tw</a>` : ''}
+                            ${config.GitHub ? `<a href="${config.GitHub}" class="social-link" target="_blank">gh</a>` : ''}
+                            ${config.Website ? `<a href="${config.Website}" class="social-link" target="_blank">web</a>` : ''}
+                        </div>
+                    </div>
+                    
+                    <div class="content">
+                        <div class="section">
+                            <h2>👋 About Me</h2>
+                            <p class="about-text">${config.AboutText || 'I\'m a dedicated professional with expertise in modern technologies. I love solving complex problems and building solutions that make a difference.'}</p>
+                        </div>
+                        
+                        <div class="section">
+                            <h2>📞 Get In Touch</h2>
+                            <div class="contact-grid">
+                                <div class="contact-item">
+                                    <div class="contact-icon">@</div>
+                                    <div class="contact-info">
+                                        <h3>Email</h3>
+                                        <p><a href="mailto:${config.Email || 'john@example.com'}">${config.Email || 'john@example.com'}</a></p>
+                                    </div>
+                                </div>
+                                
+                                ${config.Phone ? `
+                                <div class="contact-item">
+                                    <div class="contact-icon">📞</div>
+                                    <div class="contact-info">
+                                        <h3>Phone</h3>
+                                        <p><a href="tel:${config.Phone}">${config.Phone}</a></p>
+                                    </div>
+                                </div>
+                                ` : ''}
+                                
+                                <div class="contact-item">
+                                    <div class="contact-icon">📍</div>
+                                    <div class="contact-info">
+                                        <h3>Location</h3>
+                                        <p>${config.Location || 'Location'}</p>
+                                    </div>
+                                </div>
+                                
+                                ${config.Website ? `
+                                <div class="contact-item">
+                                    <div class="contact-icon">🌐</div>
+                                    <div class="contact-info">
+                                        <h3>Website</h3>
+                                        <p><a href="${config.Website}" target="_blank">${config.Website.replace(/https?:\/\//, '')}</a></p>
+                                    </div>
+                                </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+            } catch (error) {
+                // If config.txt doesn't exist or can't be loaded, show default content
+                console.error('Error loading config:', error);
+                document.getElementById('content').innerHTML = `
+                    <div class="hero">
+                        <div class="avatar">JD</div>
+                        <h1 class="name">John Doe</h1>
+                        <p class="title">Professional</p>
+                        <p class="company">Tech Corp • San Francisco, CA</p>
+                        <h2 class="headline">Welcome to My Professional Landing Page</h2>
+                        <p class="tagline">Passionate about creating amazing digital experiences</p>
+                    </div>
+                    
+                    <div class="content">
+                        <div class="section">
+                            <h2>⚠️ Configuration Missing</h2>
+                            <p class="about-text">Please create a <code>config.txt</code> file to customize this page with your information.</p>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        /**
+         * Toggle between light and dark themes
+         * Saves the user's preference in localStorage
+         */
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            // Apply the new theme
+            html.setAttribute('data-theme', newTheme);
+            // Save preference for next visit
+            localStorage.setItem('theme', newTheme);
+            
+            // Update the toggle button icon
+            const toggle = document.querySelector('.theme-toggle');
+            toggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        }
+        
+        /**
+         * Initialize the theme when the page loads
+         * Checks for saved preference or uses system preference
+         */
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+            
+            // Apply the determined theme
+            document.documentElement.setAttribute('data-theme', theme);
+            const toggle = document.querySelector('.theme-toggle');
+            if (toggle) {
+                toggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+            }
+        }
+
+        /**
+         * Main initialization when page loads
+         * Sets up theme and loads user configuration
+         */
+        window.addEventListener('DOMContentLoaded', () => {
+            initTheme();    // Set up light/dark mode
+            loadConfig();   // Load and display user's information
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "name": "cfpagesbasic",
+  "version": "1.0.0",
+  "description": "Professional landing page template with light/dark mode",
+  "main": "index.html",
+  "scripts": {
+    "build": "echo 'Static site ready - no build process needed'",
+    "start": "echo 'Open index.html in your browser'"
+  },
+  "keywords": ["landing-page", "template", "cloudflare-pages", "static-site"],
+  "author": "TAS Labs",
+  "license": "MIT"
+}

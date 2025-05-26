@@ -1,0 +1,19 @@
+# Personal Information - Edit these values to customize your landing page
+FirstName=John
+LastName=Doe
+Email=john@example.com
+Phone=+1 (555) 123-4567
+Title=Software Developer
+Company=Tech Corp
+Location=San Francisco, CA
+
+# Social Links (leave blank to hide)
+LinkedIn=https://linkedin.com/in/johndoe
+Twitter=https://twitter.com/johndoe
+GitHub=https://github.com/johndoe
+Website=https://johndoe.com
+
+# Page Content
+Headline=Welcome to My Professional Landing Page
+Tagline=Passionate about creating amazing digital experiences
+AboutText=I'm a dedicated professional with expertise in modern web technologies. I love solving complex problems and building solutions that make a difference.
